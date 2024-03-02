@@ -24,6 +24,7 @@ connect_db(app)
 toolbar = DebugToolbarExtension(app)
 
 
+
 @app.get('/')
 def display_homepage():
     """Displays homepage"""
@@ -61,7 +62,7 @@ def add_pet():
 def edit_pet(pet_id):
     """Handle showing and editing info about a pet"""
 
-    pet = Pet.query.get(pet_id)
+    pet = Pet.query.get_or_404(pet_id)
     form = EditPetForm(obj=pet)
 
     if form.validate_on_submit():
@@ -70,16 +71,11 @@ def edit_pet(pet_id):
         pet.available = form.available.data
 
         db.session.commit()
+
         flash("Pet Updated")
         return redirect(f'/{pet_id}')
 
     else:
         return render_template('show_pet.html', form=form, pet=pet)
-
-
-
-
-
-
 
 
